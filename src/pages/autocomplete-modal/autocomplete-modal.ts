@@ -13,6 +13,7 @@ export class AutocompleteModalPage {
   @ViewChild('searchbar') searchBar;
 
   constructor(public viewCtrl: ViewController,
+    
               private keyboard: Keyboard) {
   }
 
@@ -50,8 +51,8 @@ export class AutocompleteModalPage {
     }
     let self = this;
     let config = {
-      types: ['address'], // other types available in the API: 'establishment', 'regions', and 'cities'
-      input: this.autocomplete.query
+      //types: ['geocode'], // other types available in the API: 'establishment', 'regions', and 'cities'
+      input: this.autocomplete.query,
     };
     this.acService.getPlacePredictions(config, function (predictions, status) {
       self.autocompleteItems = [];

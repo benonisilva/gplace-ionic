@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="login-green">
     <ion-title>
-      Gmaps Autocomplete
+      Pesquisa Locais
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -9,7 +9,7 @@
 <ion-content padding>
  <ion-list no-lines>
    <ion-item no-lines (click)="showModal()">
-     <ion-searchbar tappable color="primary" id="autocomplete" type="text" name="title" #searchbar [(ngModel)]="userAddress" placeholder="Please enter address..."></ion-searchbar>
+     <ion-searchbar tappable color="primary" id="autocomplete" type="text" name="title" #searchbar [(ngModel)]="userAddress" placeholder="Entre com um endereço..."></ion-searchbar>
    </ion-item>
    <ion-item no-lines>
      <agm-map [streetViewControl]="false" [disableDefaultUI]="true" [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom" [styles]="styles">
@@ -20,9 +20,21 @@
     }" [latitude]="latitude" [longitude]="longitude"></agm-marker>
      </agm-map>
    </ion-item>
-   <ion-label *ngIf="addressDetails">Output: </ion-label>
-   <ion-item text-wrap *ngIf="addressDetails">
-     <pre >{{ addressDetails | json }}</pre>
-   </ion-item>
  </ion-list>
-</ion-content>s
+ <hr>
+ <ion-grid>
+   <ion-row>
+    <ion-col col-12>
+      <ion-fab bottom right >
+        <button ion-fab>Opções</button>
+        <ion-fab-list side="left">
+          <button ion-fab (click)="showPesquisa()"><ion-icon name="search"></ion-icon></button>
+          <button ion-fab><ion-icon name="attach"></ion-icon></button>
+        </ion-fab-list>
+      </ion-fab>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+  </ion-row>
+</ion-grid>
+</ion-content>

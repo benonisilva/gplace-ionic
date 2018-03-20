@@ -1,5 +1,6 @@
+import { PesquisaModalPage } from './../pesquisa-modal/pesquisa-modal';
 import {Component, ElementRef, HostListener, NgZone, ViewChild} from '@angular/core';
-import {ModalController} from 'ionic-angular';
+import {ModalController, NavController} from 'ionic-angular';
 import {AgmMap} from '@agm/core';
 import {MAP_STYLE} from '../../config/config';
 import {AutocompleteModalPage} from '../autocomplete-modal/autocomplete-modal';
@@ -37,6 +38,7 @@ export class HomePage {
   styles: any = MAP_STYLE;
 
   constructor(private ngZone: NgZone,
+              private navCtrl: NavController,
               private modalCtrl: ModalController) {
 
   }
@@ -57,6 +59,15 @@ export class HomePage {
       }
     });
     modal.present();
+  }
+
+  showPesquisa() {
+    if( this.latitude && this.longitude ) {
+      let modal = this.modalCtrl.create(PesquisaModalPage, {
+         location: { lat: this.latitude, lng: this.longitude} 
+      });
+      modal.present();
+    }
   }
 
   private geocodeAddress(place_id: string): void {
@@ -102,8 +113,8 @@ export class HomePage {
   private redrawMap() {
     this.map.triggerResize()
       .then(() => {
-        this.latitude = 37.9794500;
-        this.longitude = 23.7162200;
+        this.latitude = -7.229075;
+        this.longitude = -35.880834;
         this.zoom = 17;
         this.map._mapsWrapper.setCenter({lat: this.latitude, lng: this.longitude});
       });

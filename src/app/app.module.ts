@@ -10,18 +10,20 @@ import { HomePage } from '../pages/home/home';
 import {AutocompleteModalPage} from '../pages/autocomplete-modal/autocomplete-modal';
 import {Keyboard} from '@ionic-native/keyboard';
 import {PrettyJsonModule} from 'angular2-prettyjson';
+import { PesquisaModalPage } from '../pages/pesquisa-modal/pesquisa-modal';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    AutocompleteModalPage
+    AutocompleteModalPage,
+    PesquisaModalPage,
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AgmCoreModule.forRoot({
-      apiKey   : 'YOUR_GOOGLE_API_****PLACES****_KEY',
+      apiKey   : 'AIzaSyBw7YkFGWVgVvD-sLZylpjRrcpFuQYS1Bk',
       libraries: ['places']
     }),
     PrettyJsonModule
@@ -30,7 +32,8 @@ import {PrettyJsonModule} from 'angular2-prettyjson';
   entryComponents: [
     MyApp,
     HomePage,
-    AutocompleteModalPage
+    AutocompleteModalPage,
+    PesquisaModalPage
   ],
   providers: [
     StatusBar,
