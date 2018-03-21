@@ -4,8 +4,6 @@ import {ModalController, NavController} from 'ionic-angular';
 import {AgmMap , MapsAPILoader} from '@agm/core';
 import {MAP_STYLE} from '../../config/config';
 import {AutocompleteModalPage} from '../autocomplete-modal/autocomplete-modal';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/bindCallback';
 
 declare var google: any;
 
@@ -105,34 +103,15 @@ export class HomePage {
           radius: data.radius,
           type : [data.type.value]
         };
-        let nearbyPlaces = function(search) : Observable<any> {
-          var container = document.getElementById('agmmap');
-          const service = new google.maps.places.PlacesService(container);
-          // 1) bind scope
-          const nearbySearchCallback = service.nearbySearch.bind(service);
-
-          let nearbyAsObservable : any;
-          // 2) type any fixes:
-          //    [ts] Supplied parameters do not match any signature of call target.
-          //    const nearbyAsObservable: () => Observable<{}>
-
-          nearbyAsObservable = Observable.bindCallback(
-            nearbySearchCallback        // with bound scope
-            , (results, status) => {    // 3) selector function
-                if (status != google.maps.places.PlacesServiceStatus.OK) throw {status, results};
-                return results
-              }
-          );
-          return nearbyAsObservable(search) as Observable<any>
-        }
-        nearbyPlaces(search).subscribe((res)=>{
-              this.ngZone.run(()=>{
-                this.itens = res.sort((a,b)=>{return a.rating-b.rating});
-                this.loading = false;
-                console.log(res);
-              });
-
-        });
+        service.nearbySearch(search,(res,status, pagination)=>{
+          this.ngZone.run(()=>{
+              this.itens = res.sort((a,b)=>{return a.rating-b.rating});
+              this.loading = false;
+              console.log(res);
+              console.log(pagination);
+              this.pagination = pagination;
+          });
+      });
       }
 
     }
