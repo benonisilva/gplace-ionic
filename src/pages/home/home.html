@@ -5,14 +5,16 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-
+<div id="agmmap">
+</div>
 <ion-content padding>
+    <ion-spinner *ngIf="loading"></ion-spinner>
  <ion-list no-lines>
    <ion-item no-lines (click)="showModal()">
      <ion-searchbar tappable color="primary" id="autocomplete" type="text" name="title" #searchbar [(ngModel)]="userAddress" placeholder="Entre com um endereço..."></ion-searchbar>
    </ion-item>
    <ion-item no-lines>
-     <agm-map [streetViewControl]="false" [disableDefaultUI]="true" [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom" [styles]="styles">
+     <agm-map  [streetViewControl]="false"  [disableDefaultUI]="true" [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom" [styles]="styles">
        <agm-marker [iconUrl]="{
     url: './assets/icon/blue-pin.png',
     size: {width: 35, height: 53},
@@ -35,6 +37,30 @@
     </ion-col>
   </ion-row>
   <ion-row>
+    <ion-col col-4>
+        Nome
+    </ion-col>
+    <ion-col col-5>
+        Endereço
+    </ion-col>
+    <ion-col col-3>
+        Classificaçao
+    </ion-col>
+  </ion-row>
+  <hr>
+  <ion-row *ngFor="let item of itens" class="row-itens" (click)="openItem(item)">
+    <ion-col color="dark"  col-4>
+        {{item.name}}
+    </ion-col>
+    <ion-col col-5>
+        {{item.vicinity}}
+    </ion-col>
+    <ion-col col-3>
+        {{item.rating ? item.rating : 'NA' }}
+    </ion-col>
   </ion-row>
 </ion-grid>
 </ion-content>
+<ion-footer *ngIf="pagination?.hasNextPage" (click)="pagination.nextPage()">
+  <button ion-button full>Mais Resultados</button>
+</ion-footer>

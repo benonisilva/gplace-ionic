@@ -13,24 +13,30 @@ export class PesquisaModalPage {
 
 
   constructor(public viewCtrl: ViewController,
-              private params: NavParams, 
+              private params: NavParams,
               private keyboard: Keyboard) {
   }
   search: any;
   acService: any;
   location: any;
-  isGenerica: boolean;
+  isGenerica: boolean = true;
   types: any [] = TYPES_SEARCH;
+  endereco: string;
 
   ngOnInit() {
-    this.acService = new google.maps.places.AutocompleteService();
     this.search = {
-      query: ''
+      query: '',
+      type: null,
+      isGeneric: true,
+      radius:  50
     };
   }
   updateItem(check) {
       this.isGenerica = check;
       this.search.query = '';
+      this.search.isGeneric = check;
+      this.search.type = null;
+      this.types = TYPES_SEARCH;
   }
 
 
@@ -48,10 +54,15 @@ export class PesquisaModalPage {
     this.viewCtrl.dismiss();
   }
 
+  enviar(search: any) {
+    this.viewCtrl.dismiss(search);
+  }
+
   ionViewDidLoad() {
     setTimeout(() => {
       this.keyboard.show();
-      this.location =  this.params.get('location');
+      this.search.location =  this.params.get('location');
+      this.endereco = this.params.get('endereco');
     }, 400);
   }
 }

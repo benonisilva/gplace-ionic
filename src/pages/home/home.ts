@@ -1,9 +1,11 @@
 import { PesquisaModalPage } from './../pesquisa-modal/pesquisa-modal';
 import {Component, ElementRef, HostListener, NgZone, ViewChild} from '@angular/core';
 import {ModalController, NavController} from 'ionic-angular';
-import {AgmMap} from '@agm/core';
+import {AgmMap , MapsAPILoader} from '@agm/core';
 import {MAP_STYLE} from '../../config/config';
 import {AutocompleteModalPage} from '../autocomplete-modal/autocomplete-modal';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/bindCallback';
 
 declare var google: any;
 
@@ -28,8 +30,12 @@ export class HomePage {
   placedetails: any;
   userAddress;
   addressDetails;
+  pagination: any;
 
   geocoder: any;
+  pService: any;
+  itens: any[] = [];
+  loading: boolean = false;
 
   public latitude: number;
   public longitude: number;
@@ -39,8 +45,8 @@ export class HomePage {
 
   constructor(private ngZone: NgZone,
               private navCtrl: NavController,
+              private mapsAPILoader: MapsAPILoader,
               private modalCtrl: ModalController) {
-
   }
 
   ionViewDidLoad() {
@@ -55,16 +61,90 @@ export class HomePage {
         this.geocodeAddress(data.place_id);
         this.userAddress = data.description;
         this.addressDetails = data;
-        console.log(data)
+        console.log(data);
       }
     });
     modal.present();
   }
 
+  openItem(item:any) {
+    var container = document.getElementById('agmmap');
+    let service = new google.maps.places.PlacesService(container);
+    var request = {
+      placeId: item.place_id
+    };
+    console.log(request);
+    service.getDetails(request, (res)=>{
+      console.log(res);
+    });
+  }
+
+  onSucessDismissPesquisa(data){
+    if(data) {
+      this.loading = true;
+      var container = document.getElementById('agmmap');
+      let service = new google.maps.places.PlacesService(container);
+      if(data.isGeneric) {
+        let search = {
+          location : data.location,
+          radius: data.radius,
+          keyword : data.query
+        };
+        service.nearbySearch(search,(res,status, pagination)=>{
+            this.ngZone.run(()=>{
+                this.itens = res.sort((a,b)=>{return a.rating-b.rating});
+                this.loading = false;
+                console.log(res);
+                console.log(pagination);
+                this.pagination = pagination;
+            });
+        });
+      } else {
+        let search = {
+          location : data.location,
+          radius: data.radius,
+          type : [data.type.value]
+        };
+        let nearbyPlaces = function(search) : Observable<any> {
+          var container = document.getElementById('agmmap');
+          const service = new google.maps.places.PlacesService(container);
+          // 1) bind scope
+          const nearbySearchCallback = service.nearbySearch.bind(service);
+
+          let nearbyAsObservable : any;
+          // 2) type any fixes:
+          //    [ts] Supplied parameters do not match any signature of call target.
+          //    const nearbyAsObservable: () => Observable<{}>
+
+          nearbyAsObservable = Observable.bindCallback(
+            nearbySearchCallback        // with bound scope
+            , (results, status) => {    // 3) selector function
+                if (status != google.maps.places.PlacesServiceStatus.OK) throw {status, results};
+                return results
+              }
+          );
+          return nearbyAsObservable(search) as Observable<any>
+        }
+        nearbyPlaces(search).subscribe((res)=>{
+              this.ngZone.run(()=>{
+                this.itens = res.sort((a,b)=>{return a.rating-b.rating});
+                this.loading = false;
+                console.log(res);
+              });
+
+        });
+      }
+
+    }
+  }
+
   showPesquisa() {
     if( this.latitude && this.longitude ) {
       let modal = this.modalCtrl.create(PesquisaModalPage, {
-         location: { lat: this.latitude, lng: this.longitude} 
+         location: { lat: this.latitude, lng: this.longitude} , endereco: this.userAddress
+      });
+      modal.onDidDismiss((dt)=>{
+        this.onSucessDismissPesquisa(dt);
       });
       modal.present();
     }
