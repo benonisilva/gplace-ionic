@@ -8,7 +8,7 @@ import {AgmCoreModule} from '@agm/core';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import {AutocompleteModalPage} from '../pages/autocomplete-modal/autocomplete-modal';
+import { AutocompleteModalPage } from '../pages/autocomplete-modal/autocomplete-modal';
 import { PesquisaModalPage } from '../pages/pesquisa-modal/pesquisa-modal';
 import { PlaceModalPage } from '../pages/place-detail/place-modal';
 import { TestePage } from '../pages/teste/teste';

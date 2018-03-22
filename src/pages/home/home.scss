@@ -13,9 +13,12 @@ page-home {
    }
 
   .row-itens:nth-child(even)
-    {
-      background: rgb(51, 120, 209)
-    };
+  {
+      background: rgb(51, 120, 209);
+  }
+  .row-saved {
+      color:white;
+  }
 
   .searchbar-ios {
     background: none;

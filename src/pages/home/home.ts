@@ -1,7 +1,8 @@
 
 import {Component, ElementRef, HostListener, NgZone, ViewChild} from '@angular/core';
-import {ModalController, NavController, Modal} from 'ionic-angular';
+import { ModalController, NavController, Modal} from 'ionic-angular';
 import {AgmMap} from '@agm/core';
+import { Storage } from '@ionic/storage';
 
 import { MAP_STYLE } from '../../config/config';
 import { AutocompleteModalPage } from '../autocomplete-modal/autocomplete-modal';
@@ -12,7 +13,7 @@ declare var google: any;
 
 @Component({
   selector   : 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
 })
 export class HomePage {
 
@@ -37,6 +38,8 @@ export class HomePage {
   pService: any;
   itens: any[] = [];
   loading: boolean = false;
+  countItensSaved: number;
+  idsItensSalvos: string[];
 
   public latitude: number;
   public longitude: number;
@@ -46,23 +49,37 @@ export class HomePage {
 
   constructor(private ngZone: NgZone,
               private navCtrl: NavController,
-              //private mapsAPILoader: MapsAPILoader,
               private storage: Storage,
               private modalCtrl: ModalController) {
   }
 
   ionViewDidLoad() {
-    this.storage.keys().then( (res) => this.onSucessKeys(res));
+    this.storage.length().then((len)=>{
+      this.countItensSaved = len;
+    });
+    this.storage.keys().then((keys)=>{
+      this.onSucessKeys(keys);
+    });
     this.redrawMap();
   }
 
-  onSucessKeys(keys:any[]){
+  isSaved(placeid) {
+    return this.idsItensSalvos.some(id => id === placeid );;
+  }
+
+  onSucessKeys(keys:string[]){
     console.log(keys);
+    this.idsItensSalvos = keys;
   }
 
   onSuccessDetailDismiss(place) {
     if(place) {
-      this.storage.setItem(place.place_id,place);
+      this.storage.set(place.place_id,place).then(()=>{
+        console.log("Add:Item");
+        this.storage.length().then((len)=>{
+          this.countItensSaved = len;
+        });
+      });
     }
 
   }
@@ -93,9 +110,9 @@ export class HomePage {
       modal = this.modalCtrl.create(PlaceModalPage,{place:res});
       modal.present();
       console.log(res);
-    });
-    modal.onDidDismiss((data)=>{
-      this.onSuccessDetailDismiss(data);
+      modal.onDidDismiss((data)=>{
+        this.onSuccessDetailDismiss(data);
+      });
     });
   }
 
@@ -112,7 +129,12 @@ export class HomePage {
         };
         service.nearbySearch(search,(res,status, pagination)=>{
             this.ngZone.run(()=>{
-                this.itens = res.sort((a,b)=>{return a.rating-b.rating});
+                this.itens = res.sort( (a,b)=>{
+                  let i = a.rating ? a.rating: 0.0;
+                  let x = b.rating ? b.rating: 0.0;
+                  console.log(i-x);
+                  return i-x;
+                });
                 this.loading = false;
                 console.log(res);
                 console.log(pagination);
@@ -127,7 +149,12 @@ export class HomePage {
         };
         service.nearbySearch(search,(res,status, pagination)=>{
           this.ngZone.run(()=>{
-              this.itens = res.sort((a,b)=>{return a.rating-b.rating});
+            this.itens = res.sort( (a,b)=>{
+              let i = a.rating ? a.rating: 0.0;
+              let x = b.rating ? b.rating: 0.0;
+              console.log(i-x);
+              return x-i;
+            });
               this.loading = false;
               console.log(res);
               console.log(pagination);

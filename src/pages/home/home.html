@@ -32,6 +32,7 @@
         <ion-fab-list side="left">
           <button ion-fab (click)="showPesquisa()"><ion-icon name="search"></ion-icon></button>
           <button ion-fab><ion-icon name="attach"></ion-icon></button>
+          <button ion-fab>{{countItensSaved}}</button>
         </ion-fab-list>
       </ion-fab>
     </ion-col>
@@ -48,8 +49,8 @@
     </ion-col>
   </ion-row>
   <hr>
-  <ion-row *ngFor="let item of itens" class="row-itens" (click)="openItem(item)">
-    <ion-col color="dark"  col-4>
+  <ion-row *ngFor="let item of itens" [ngClass]="{'row-saved': isSaved(item.place_id)}" class="row-itens"  (click)="openItem(item)">
+    <ion-col  col-4>
         {{item.name}}
     </ion-col>
     <ion-col col-5>

@@ -64,7 +64,15 @@ export class PlaceModalPage {
   }
 
   salvar(item) {
-    this.viewCtrl.dismiss(item);
+    let jsonItem = {
+      place_id:item.place_id,
+      rating:item.rating,
+      website :item.website,
+      opening_hours: { weekday_text: item.opening_hours? item.opening_hours.weekday_text: [] },
+      formatted_address : item.formatted_address,
+      formatted_phone_number:item.formatted_phone_number
+    }
+    this.viewCtrl.dismiss(jsonItem);
   }
   exportCsv() {
     this.csvUltils.exportCSVFile(this.headers, this.itemsFormatted, "fileTitle");
