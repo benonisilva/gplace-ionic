@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
-import {ViewController} from 'ionic-angular';
-import {Keyboard} from '@ionic-native/keyboard';
+import { ViewController } from 'ionic-angular';
+//import { Keyboard } from '@ionic-native/keyboard';
 
 declare var google: any;
 
@@ -13,8 +13,9 @@ export class AutocompleteModalPage {
   @ViewChild('searchbar') searchBar;
 
   constructor(public viewCtrl: ViewController,
-    
-              private keyboard: Keyboard) {
+
+              //private keyboard: Keyboard
+            ) {
   }
 
   autocompleteItems: any;
@@ -36,8 +37,8 @@ export class AutocompleteModalPage {
   ionViewDidLoad() {
     setTimeout(() => {
       this.searchBar.setFocus();
-      this.keyboard.show();
-    }, 600);
+      //this.keyboard.show();
+    }, 50);
   }
 
   chooseItem(item: any) {

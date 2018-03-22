@@ -1,0 +1,47 @@
+<ion-header>
+
+  <ion-toolbar color="login-green">
+    <ion-title> Detalhes {{item?.name}} </ion-title>
+    <ion-buttons start>
+      <button tappable ion-button (click)="dismiss()">
+        <ion-icon color="white" name="md-close" showWhen="android"></ion-icon>
+        <ion-icon color="white" name="arrow-down" showWhen="ios"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-card>
+        <ion-card-content>
+          <ion-card-title>
+            {{item?.formatted_phone_number}}
+            </ion-card-title>
+          <p>
+             {{item?.formatted_address}}
+          </p>
+          <ion-list>
+              <ion-list-header>
+                  Horarios de Funcionamento
+                </ion-list-header>
+            <ion-item *ngFor="let i of item?.opening_hours?.weekday_text" >
+                  <span>
+                    {{i}}
+                  </span>
+              </ion-item>
+          </ion-list>
+          <ion-item *ngIf="item?.website" >
+            <a [href]="item?.website" target="_blank" >
+              Web Site
+            </a>
+            <button ion-button icon-left clear item-end>
+                <ion-icon name="star"></ion-icon>
+                {{item.rating ? item.rating : 'NA'}}
+              </button>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+      <ion-item>
+        <button ion-button round outline (click)="salvar(item)">Savar</button>
+      </ion-item>
+</ion-content>

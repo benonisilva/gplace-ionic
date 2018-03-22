@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ViewController, NavParams} from 'ionic-angular';
-import { Keyboard } from '@ionic-native/keyboard';
+//import { Keyboard } from '@ionic-native/keyboard';
 import { TYPES_SEARCH }  from '../../config/types'
 
 declare var google: any;
@@ -14,7 +14,8 @@ export class PesquisaModalPage {
 
   constructor(public viewCtrl: ViewController,
               private params: NavParams,
-              private keyboard: Keyboard) {
+              //private keyboard: Keyboard
+            ) {
   }
   search: any;
   acService: any;
@@ -60,7 +61,7 @@ export class PesquisaModalPage {
 
   ionViewDidLoad() {
     setTimeout(() => {
-      this.keyboard.show();
+      //this.keyboard.show();
       this.search.location =  this.params.get('location');
       this.endereco = this.params.get('endereco');
     }, 400);

@@ -1,11 +1,11 @@
 {
-  "name": "Ionic",
-  "short_name": "Ionic",
+  "name": "Google Places Search",
+  "short_name": "GPlces",
   "start_url": "index.html",
-  "display": "standalone",
+  "display": "fullscreen",
   "icons": [{
-    "src": "assets/imgs/logo.png",
-    "sizes": "512x512",
+    "src": "assets/imgs/google_maps_logo-450x450.png",
+    "sizes": "450x450",
     "type": "image/png"
   }],
   "background_color": "#4e8ef7",

@@ -1,9 +1,12 @@
-import { PesquisaModalPage } from './../pesquisa-modal/pesquisa-modal';
+
 import {Component, ElementRef, HostListener, NgZone, ViewChild} from '@angular/core';
-import {ModalController, NavController} from 'ionic-angular';
-import {AgmMap , MapsAPILoader} from '@agm/core';
-import {MAP_STYLE} from '../../config/config';
-import {AutocompleteModalPage} from '../autocomplete-modal/autocomplete-modal';
+import {ModalController, NavController, Modal} from 'ionic-angular';
+import {AgmMap} from '@agm/core';
+
+import { MAP_STYLE } from '../../config/config';
+import { AutocompleteModalPage } from '../autocomplete-modal/autocomplete-modal';
+import { PesquisaModalPage } from './../pesquisa-modal/pesquisa-modal';
+import { PlaceModalPage } from '../place-detail/place-modal';
 
 declare var google: any;
 
@@ -43,12 +46,25 @@ export class HomePage {
 
   constructor(private ngZone: NgZone,
               private navCtrl: NavController,
-              private mapsAPILoader: MapsAPILoader,
+              //private mapsAPILoader: MapsAPILoader,
+              private storage: Storage,
               private modalCtrl: ModalController) {
   }
 
   ionViewDidLoad() {
+    this.storage.keys().then( (res) => this.onSucessKeys(res));
     this.redrawMap();
+  }
+
+  onSucessKeys(keys:any[]){
+    console.log(keys);
+  }
+
+  onSuccessDetailDismiss(place) {
+    if(place) {
+      this.storage.setItem(place.place_id,place);
+    }
+
   }
 
   showModal() {
@@ -68,12 +84,18 @@ export class HomePage {
   openItem(item:any) {
     var container = document.getElementById('agmmap');
     let service = new google.maps.places.PlacesService(container);
+    let modal: Modal;
     var request = {
       placeId: item.place_id
     };
     console.log(request);
     service.getDetails(request, (res)=>{
+      modal = this.modalCtrl.create(PlaceModalPage,{place:res});
+      modal.present();
       console.log(res);
+    });
+    modal.onDidDismiss((data)=>{
+      this.onSuccessDetailDismiss(data);
     });
   }
 
