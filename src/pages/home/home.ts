@@ -8,6 +8,7 @@ import { MAP_STYLE } from '../../config/config';
 import { AutocompleteModalPage } from '../autocomplete-modal/autocomplete-modal';
 import { PesquisaModalPage } from './../pesquisa-modal/pesquisa-modal';
 import { PlaceModalPage } from '../place-detail/place-modal';
+import { ListaOffPage } from '../lista-off/lista-off';
 
 declare var google: any;
 
@@ -23,6 +24,10 @@ export class HomePage {
   @HostListener('window:resize', ['$event'])
   public onResize(event) {
     this.redrawMap();
+  }
+
+  admin() {
+    alert("Nao implementado");
   }
 
   address: any = {
@@ -116,6 +121,26 @@ export class HomePage {
     });
   }
 
+  _sortByRating(a:any, b:any) {
+      let i = a.rating ? a.rating: 0.0;
+      let x = b.rating ? b.rating: 0.0;
+      return x-i;
+  }
+
+  _onSearchResult(res,status, pagination) {
+    this.itens = [];
+    this.ngZone.run(()=>{
+      res.forEach(element => {
+        this.itens.push(element);
+      });
+      this.itens.sort( (a,b)=> this._sortByRating(a,b));
+      this.loading = false;
+      //console.log(res);
+      //console.log(pagination);
+      this.pagination = pagination;
+    });
+  }
+
   onSucessDismissPesquisa(data){
     if(data) {
       this.loading = true;
@@ -125,42 +150,20 @@ export class HomePage {
         let search = {
           location : data.location,
           radius: data.radius,
-          keyword : data.query
+          keyword : data.query,
+          rankby: 'prominence',
         };
-        service.nearbySearch(search,(res,status, pagination)=>{
-            this.ngZone.run(()=>{
-                this.itens = res.sort( (a,b)=>{
-                  let i = a.rating ? a.rating: 0.0;
-                  let x = b.rating ? b.rating: 0.0;
-                  console.log(i-x);
-                  return i-x;
-                });
-                this.loading = false;
-                console.log(res);
-                console.log(pagination);
-                this.pagination = pagination;
-            });
-        });
+        service.nearbySearch(search,(res,status, pagination)=>
+          this._onSearchResult(res,status, pagination) );
       } else {
         let search = {
           location : data.location,
           radius: data.radius,
-          type : [data.type.value]
+          type : [data.type.value],
+          rankby: 'prominence',
         };
-        service.nearbySearch(search,(res,status, pagination)=>{
-          this.ngZone.run(()=>{
-            this.itens = res.sort( (a,b)=>{
-              let i = a.rating ? a.rating: 0.0;
-              let x = b.rating ? b.rating: 0.0;
-              console.log(i-x);
-              return x-i;
-            });
-              this.loading = false;
-              console.log(res);
-              console.log(pagination);
-              this.pagination = pagination;
-          });
-      });
+        service.nearbySearch(search,(res,status, pagination)=>
+          this._onSearchResult(res,status, pagination) );
       }
 
     }
@@ -193,6 +196,16 @@ export class HomePage {
     });
   }
 
+  listOffLines() {
+    let itens:any [] = [];
+    this.storage.forEach( (place) => {
+      itens.push(place);
+    }).then(()=>{
+      let modal = this.modalCtrl.create(ListaOffPage, {places:itens});
+      modal.present();
+    });
+  }
+
   private reset() {
     this.initPlacedetails();
     this.address.place = '';
@@ -221,10 +234,10 @@ export class HomePage {
   private redrawMap() {
     this.map.triggerResize()
       .then(() => {
-        this.latitude = -7.229075;
-        this.longitude = -35.880834;
+        this.latitude = -10.9116037 as number;
+        this.longitude = -37.0562398  as number;
         this.zoom = 17;
-        this.map._mapsWrapper.setCenter({lat: this.latitude, lng: this.longitude});
+        this.map._mapsWrapper.setCenter({lat: parseFloat("-10.9116037"), lng: parseFloat("-37.0562398")});
       });
   }
 }

@@ -1,0 +1,33 @@
+<ion-header>
+    <ion-toolbar color="login-green">
+      <ion-title>
+        Acesso Admin    </ion-title>
+      <ion-buttons start>
+        <button tappable ion-button (click)="dismiss()">
+          <ion-icon color="white" name="md-close" ></ion-icon>
+          <!-- <ion-icon color="white" name="arrow-down" showWhen="ios"></ion-icon> -->
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+<ion-content>
+  <form (submit)="doLogin()">
+    <ion-list>
+
+      <ion-item>
+        <ion-label fixed>Email</ion-label>
+        <ion-input type="email" [(ngModel)]="account.email" name="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Senha</ion-label>
+        <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>
+      </ion-item>
+
+      <div padding>
+        <button ion-button color="primary" block>Login</button>
+      </div>
+
+    </ion-list>
+  </form>
+</ion-content>

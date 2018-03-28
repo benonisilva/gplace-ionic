@@ -65,6 +65,7 @@ export class PlaceModalPage {
 
   salvar(item) {
     let jsonItem = {
+      name: item.name,
       place_id:item.place_id,
       rating:item.rating,
       website :item.website,

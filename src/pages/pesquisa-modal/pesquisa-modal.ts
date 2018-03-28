@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ViewController, NavParams} from 'ionic-angular';
-//import { Keyboard } from '@ionic-native/keyboard';
 import { TYPES_SEARCH }  from '../../config/types'
+import { AngularFireDatabase } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
 
 declare var google: any;
 
@@ -11,12 +12,18 @@ declare var google: any;
 })
 export class PesquisaModalPage {
 
-
+  atividades:any[] = [];
+  atividadesCache: any[] = [];
   constructor(public viewCtrl: ViewController,
               private params: NavParams,
+              afDB: AngularFireDatabase,
               //private keyboard: Keyboard
             ) {
+      afDB.list('atividades').valueChanges().subscribe((res)=>{
+        this.atividades = res;
+      });
   }
+
   search: any;
   acService: any;
   location: any;
@@ -29,7 +36,8 @@ export class PesquisaModalPage {
       query: '',
       type: null,
       isGeneric: true,
-      radius:  50
+      radius:  50000,
+      minprice: 4,
     };
   }
   updateItem(check) {
@@ -37,7 +45,6 @@ export class PesquisaModalPage {
       this.search.query = '';
       this.search.isGeneric = check;
       this.search.type = null;
-      this.types = TYPES_SEARCH;
   }
 
 
@@ -50,6 +57,15 @@ export class PesquisaModalPage {
         })
       }
   }
+  getSearchGeneric(ev: any) {
+    this.atividadesCache = [...this.atividades];
+    let val = ev.target.value;
+    if (val && val.trim() != '') {
+      this.atividadesCache = this.atividadesCache.filter((item) => {
+        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
+}
 
   dismiss() {
     this.viewCtrl.dismiss();

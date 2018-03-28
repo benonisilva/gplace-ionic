@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-toolbar color="login-green">
-    <ion-title> Detalhes {{item?.name}} </ion-title>
+    <ion-title>  {{item?.name}} </ion-title>
     <ion-buttons start>
       <button tappable ion-button (click)="dismiss()">
         <ion-icon color="white" name="md-close"></ion-icon>
@@ -15,7 +15,10 @@
     <ion-card>
         <ion-card-content>
           <ion-card-title>
-            {{item?.formatted_phone_number}}
+             <a href="tel:{{item?.formatted_phone_number}}" icon-left small>
+               {{item?.formatted_phone_number}}
+               <ion-icon name="logo-skype"></ion-icon>
+              </a>
             </ion-card-title>
           <p>
              {{item?.formatted_address}}

@@ -31,8 +31,8 @@
         <button ion-fab>Opções</button>
         <ion-fab-list side="left">
           <button ion-fab (click)="showPesquisa()"><ion-icon name="search"></ion-icon></button>
-          <button ion-fab><ion-icon name="attach"></ion-icon></button>
-          <button ion-fab>{{countItensSaved}}</button>
+          <button ion-fab (click)="admin()"><ion-icon name="person" ></ion-icon></button>
+          <button ion-fab (click)="listOffLines()" >{{countItensSaved}}</button>
         </ion-fab-list>
       </ion-fab>
     </ion-col>

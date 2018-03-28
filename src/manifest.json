@@ -1,8 +1,8 @@
 {
-  "name": "Google Places Search",
-  "short_name": "GPlces",
+  "name": "Google Places Busca",
+  "short_name": "GPlaces",
   "start_url": "index.html",
-  "display": "fullscreen",
+  "display": "standalone",
   "icons": [{
     "src": "assets/imgs/google_maps_logo-450x450.png",
     "sizes": "450x450",

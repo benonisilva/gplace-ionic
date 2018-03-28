@@ -16,9 +16,9 @@
   <ion-item>
       <ion-label >Raio de Busca (metros)</ion-label>
       <ion-badge color="secondary" item-end>{{search.radius}}</ion-badge>
-      <ion-range min="50" max="5000" color="secondary" [(ngModel)]="search.radius">
+      <ion-range min="500" max="50000" color="secondary" [(ngModel)]="search.radius">
         <ion-label range-left>50</ion-label>
-        <ion-label range-right>5000</ion-label>
+        <ion-label range-right>50000</ion-label>
       </ion-range>
     </ion-item>
   <ion-item>
@@ -26,18 +26,33 @@
       <ion-toggle [(ngModel)]="isGenerica" (ionChange)="updateItem(isGenerica)" checked="false">
       </ion-toggle>
   </ion-item>
-  <ion-searchbar *ngIf="isGenerica" placeholder="Pesquisa Generica" [(ngModel)]="search.query" (ionInput)="getSearchTerm($event)"></ion-searchbar>
+  <!-- <ion-searchbar *ngIf="isGenerica" placeholder="Pesquisa Generica"
+      [(ngModel)]="search.query" (ionInput)="getSearchTerm($event)"></ion-searchbar> -->
 
   <ion-list *ngIf="!isGenerica"  radio-group [(ngModel)]="search.type">
     <ion-list-header>
       Escolha um dos Tipos do Google
-      <ion-searchbar [(ngModel)]="search.query" placeholder="Filtrar" (ionInput)="getSearchTerm($event)"></ion-searchbar>
+      <ion-searchbar [(ngModel)]="search.query" placeholder="Filtrar" (ionInput)="getSearchTerm($event)">
+      </ion-searchbar>
     </ion-list-header>
     <ion-item *ngFor="let item of types">
       <ion-label>{{item.name}}</ion-label>
       <ion-radio [value]="item"></ion-radio>
     </ion-item>
   </ion-list>
+
+  <ion-list *ngIf="isGenerica"  radio-group [(ngModel)]="search.query">
+      <ion-list-header>
+        Seus Tipos Pré-Definidos
+        <ion-searchbar  placeholder="Filtrar"
+        (ionInput)="getSearchGeneric($event)">
+        </ion-searchbar>
+      </ion-list-header>
+      <ion-item *ngFor="let item of atividadesCache">
+        <ion-label>{{item}}</ion-label>
+        <ion-radio [value]="item"></ion-radio>
+      </ion-item>
+    </ion-list>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="secondary">
