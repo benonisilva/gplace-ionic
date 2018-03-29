@@ -7,7 +7,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import {AgmCoreModule} from '@agm/core';
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyBkvxJttqve12MAVNC_Cw2SmRHeeT6-ZTY",
+  apiKey: "AIzaSyBkvxJttqve12MAVNC_Cw2SmRHeeT6-ZTZ",
   authDomain: "first-project-7edf6.firebaseapp.com",
   databaseURL: "https://first-project-7edf6.firebaseio.com",
   projectId: "first-project-7edf6",
@@ -42,7 +42,7 @@ import { LoginPageModule } from '../pages/login/login.module';
     LoginPageModule,
     IonicStorageModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey   : 'AIzaSyBwKyVZGez75F-YigOS6z304TVYgKW19xY',
+      apiKey   : 'AIzaSyBwKyVZGez75F-YigOS6z304TVYgKW19xZ',
       libraries: ['places']
     }),
 
