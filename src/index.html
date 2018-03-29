@@ -16,13 +16,11 @@
 
 
   <script>
-
-    if ('serviceWorker' in navigator) {
-
-  window.isUpdateAvailable = new Promise(function(resolve, reject) {
-	// lazy way of disabling service workers while developing
+       window.isUpdateAvailable = new Promise(function(resolve, reject) {
+  // lazy way of disabling service workers while developing
+  console.log("window.isUpdateAvailable ");
 	 if ('serviceWorker' in navigator && ['localhost', '127'].indexOf(location.hostname) === -1) {
-		// register service worker file
+    console.log("serviceWorker in SERVER MODE");
 		 navigator.serviceWorker.register('service-worker.js')
 			.then(reg => {
 				reg.onupdatefound = () => {
@@ -45,17 +43,21 @@
 			.catch(err => console.error('[SW ERROR]', err));
 	}
 });
-window['isUpdateAvailable']
-	.then(isAvailable => {
-		if (isAvailable) {
+    if ('serviceWorker' in navigator) {
+   console.log("serviceWorker in vanigator");
+   window['isUpdateAvailable']
+	 .then(isAvailable => {
+    console.log("isUpdateAvailable :",isAvailable );
+    if (isAvailable) {
 			const toast = this.toastCtrl.create({
 				message: 'Nova Versão do Aplicativo sendo baixada.',
 				position: 'bottom',
 				showCloseButton: true,
 			});
 			toast.present();
-		}
-	});
+		 }
+	  });
+
     }
 
   </script>

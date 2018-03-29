@@ -23,6 +23,8 @@ import { ListaOffPage } from '../pages/lista-off/lista-off';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { LoginPage } from '../pages/login/login';
+import { LoginPageModule } from '../pages/login/login.module';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    LoginPageModule,
     IonicStorageModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey   : 'AIzaSyBwKyVZGez75F-YigOS6z304TVYgKW19xY',
@@ -55,7 +58,8 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
     PesquisaModalPage,
     PlaceModalPage,
     ListaOffPage,
-    TestePage
+    TestePage,
+    LoginPage
   ],
   providers: [
     //StatusBar,

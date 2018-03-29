@@ -1,6 +1,6 @@
 
 import {Component, ElementRef, HostListener, NgZone, ViewChild} from '@angular/core';
-import { ModalController, NavController, Modal} from 'ionic-angular';
+import { ModalController, NavController, Modal, ToastController} from 'ionic-angular';
 import {AgmMap} from '@agm/core';
 import { Storage } from '@ionic/storage';
 
@@ -9,6 +9,7 @@ import { AutocompleteModalPage } from '../autocomplete-modal/autocomplete-modal'
 import { PesquisaModalPage } from './../pesquisa-modal/pesquisa-modal';
 import { PlaceModalPage } from '../place-detail/place-modal';
 import { ListaOffPage } from '../lista-off/lista-off';
+import { LoginPage } from '../login/login';
 
 declare var google: any;
 
@@ -27,7 +28,10 @@ export class HomePage {
   }
 
   admin() {
-    alert("Nao implementado");
+    // alert("Sera implementado em breve...!!!");
+    let modal = this.modalCtrl.create(LoginPage);
+    modal.present();
+
   }
 
   address: any = {
@@ -55,7 +59,21 @@ export class HomePage {
   constructor(private ngZone: NgZone,
               private navCtrl: NavController,
               private storage: Storage,
+              private toastCtrl: ToastController,
               private modalCtrl: ModalController) {
+              // listen to the service worker promise in index.html to see if there has been a new update.
+// condition: the service-worker.js needs to have some kind of change - e.g. increment CACHE_VERSION.
+window['isUpdateAvailable']
+.then(isAvailable => {
+  if (isAvailable) {
+    const toast = this.toastCtrl.create({
+      message: 'New Update available! Reload the webapp to see the latest juicy changes.',
+      position: 'bottom',
+      showCloseButton: true,
+    });
+    toast.present();
+  }
+});
   }
 
   ionViewDidLoad() {
@@ -128,7 +146,6 @@ export class HomePage {
   }
 
   _onSearchResult(res,status, pagination) {
-    this.itens = [];
     this.ngZone.run(()=>{
       res.forEach(element => {
         this.itens.push(element);
@@ -142,6 +159,7 @@ export class HomePage {
   }
 
   onSucessDismissPesquisa(data){
+    this.itens = [];
     if(data) {
       this.loading = true;
       var container = document.getElementById('agmmap');
@@ -203,6 +221,11 @@ export class HomePage {
     }).then(()=>{
       let modal = this.modalCtrl.create(ListaOffPage, {places:itens});
       modal.present();
+      modal.onDidDismiss((data)=>{
+        if(data) {
+          this.countItensSaved = 0;
+        }
+      });
     });
   }
 

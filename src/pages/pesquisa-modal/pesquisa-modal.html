@@ -32,7 +32,7 @@
   <ion-list *ngIf="!isGenerica"  radio-group [(ngModel)]="search.type">
     <ion-list-header>
       Escolha um dos Tipos do Google
-      <ion-searchbar [(ngModel)]="search.query" placeholder="Filtrar" (ionInput)="getSearchTerm($event)">
+      <ion-searchbar  placeholder="Filtrar" (ionInput)="getSearchTerm($event)" [(ngModel)]="search.choose">
       </ion-searchbar>
     </ion-list-header>
     <ion-item *ngFor="let item of types">
@@ -41,11 +41,11 @@
     </ion-item>
   </ion-list>
 
-  <ion-list *ngIf="isGenerica"  radio-group [(ngModel)]="search.query">
+  <ion-list *ngIf="isGenerica"  radio-group [(ngModel)]="search.customType">
       <ion-list-header>
         Seus Tipos Pré-Definidos
-        <ion-searchbar  placeholder="Filtrar"
-        (ionInput)="getSearchGeneric($event)">
+        <ion-searchbar  placeholder="Filtrar" [(ngModel)]="search.customType"
+           (ionInput)="getSearchGeneric($event)">
         </ion-searchbar>
       </ion-list-header>
       <ion-item *ngFor="let item of atividadesCache">
@@ -57,7 +57,7 @@
 <ion-footer>
   <ion-toolbar color="secondary">
 
-    <button ion-button color="save" (click)="enviar(search)" [disabled]="(isGenerica && search.query ==='') || (!isGenerica && search.type === null)">
+    <button ion-button color="save" (click)="enviar(search)" [disabled]="(search.customType === null && search.type === null)">
       Enviar
     </button>
   </ion-toolbar>

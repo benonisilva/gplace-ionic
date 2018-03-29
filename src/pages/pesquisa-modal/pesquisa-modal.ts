@@ -37,7 +37,7 @@ export class PesquisaModalPage {
       type: null,
       isGeneric: true,
       radius:  50000,
-      minprice: 4,
+      customType: null
     };
   }
   updateItem(check) {
@@ -45,6 +45,7 @@ export class PesquisaModalPage {
       this.search.query = '';
       this.search.isGeneric = check;
       this.search.type = null;
+      this.search.customType = null;
   }
 
 
@@ -72,12 +73,13 @@ export class PesquisaModalPage {
   }
 
   enviar(search: any) {
+    search.query = search.customType;
+    console.log(search);
     this.viewCtrl.dismiss(search);
   }
 
   ionViewDidLoad() {
     setTimeout(() => {
-      //this.keyboard.show();
       this.search.location =  this.params.get('location');
       this.endereco = this.params.get('endereco');
     }, 400);

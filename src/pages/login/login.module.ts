@@ -1,3 +1,4 @@
+import {AngularFireDatabase} from 'angularfire2/database';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 
@@ -14,6 +15,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
   exports: [
     LoginPage
   ],
-  providers: [ AngularFireAuth ]
+  providers: [ AngularFireAuth, AngularFireDatabase ],
 })
 export class LoginPageModule { }
